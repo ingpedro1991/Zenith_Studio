@@ -1,0 +1,10 @@
+paso 1
+
+    npm install
+
+paso 2 y ya siempre estara ejecutando el server incluso si actualizas algo 
+
+    nodemon server.js
+
+
+luego de ejecutar el paso 2 comenta la linea 61 del archivo server.js
