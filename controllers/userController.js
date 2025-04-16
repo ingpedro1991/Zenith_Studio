@@ -4,7 +4,6 @@ const config = require('../config/config');
 const bcrypt = require('bcrypt');
 
 const userController = {
-  // Obtener todos los usuarios (requiere token y rol de administrador)
   getAllUsers: async (req, res) => {
     try {
       const users = await userModel.getAllUsers();
@@ -14,7 +13,6 @@ const userController = {
     }
   },
 
-  // Obtener un usuario por ID (requiere token)
   getUserById: async (req, res) => {
     const id = req.params.id;
     try {
@@ -28,11 +26,9 @@ const userController = {
     }
   },
 
-    // Crear un nuevo usuario (registro)
     createUser: async (req, res) => {
         const { username, email, photo, password, name, status } = req.body;
 
-        // Validaciones básicas (puedes usar librerías como Joi para validaciones más robustas)
         if (!username || !email || !password || !name || !status) {
             return res.status(400).json({ message: 'Todos los campos son requeridos' });
         }
@@ -41,16 +37,14 @@ const userController = {
         }
 
         try {
-            // Verificar si el username o email ya existen
             const existingUserByUsername = await userModel.getUserByUsername(username);
             if (existingUserByUsername) {
                 return res.status(400).json({ message: 'El username ya está en uso' });
             }
-            //TODO: add check for existing email.
 
             const newUser = { username, email, photo, password, name, status };
             const userId = await userModel.createUser(newUser);
-            const user = await userModel.getUserById(userId); //Obtener el usuario recien creado.
+            const user = await userModel.getUserById(userId);
             res.status(201).json({ message: 'Usuario creado exitosamente', user: user });
         } catch (error) {
             console.error("Error al crear usuario:", error);
@@ -58,7 +52,6 @@ const userController = {
         }
     },
 
-  // Actualizar un usuario por ID (requiere token, solo el propio usuario o administrador)
   updateUser: async (req, res) => {
     const id = req.params.id;
     const { username, email, photo, password, name, status } = req.body;
@@ -69,7 +62,6 @@ const userController = {
         return res.status(404).json({ message: 'Usuario no encontrado' });
       }
 
-      // Solo permitir actualizar al propio usuario o al administrador
       if (req.user.username !== 'admin' && req.user.username !== userToUpdate.username) {
         return res.status(403).json({ message: 'No tienes permiso para actualizar este usuario' });
       }
@@ -83,7 +75,6 @@ const userController = {
     }
   },
 
-  // Eliminar un usuario por ID (requiere token y rol de administrador)
   deleteUser: async (req, res) => {
     const id = req.params.id;
     try {
@@ -98,7 +89,6 @@ const userController = {
     }
   },
 
-  // Login de usuario
   login: async (req, res) => {
     const { username, password } = req.body;
 
@@ -113,14 +103,13 @@ const userController = {
         return res.status(401).json({ message: 'Credenciales inválidas' });
       }
 
-      // Generar token JWT
       const token = jwt.sign(
-        { id: user.id, username: user.username }, // Incluye información del usuario en el payload
+        { id: user.id, username: user.username },
         config.jwt.secret,
         { expiresIn: config.jwt.expiresIn }
       );
 
-      res.json({ message: 'Inicio de sesión exitoso', token, user: {id: user.id, username: user.username, email: user.email} }); //Devuelvo el usuario para tener los datos en el front
+      res.json({ message: 'Inicio de sesión exitoso', token, user: {id: user.id, username: user.username, email: user.email} });
     } catch (error) {
       console.error("Error en login:", error);
       res.status(500).json({ message: 'Error al iniciar sesión' });

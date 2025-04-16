@@ -2,7 +2,6 @@ const shoppingModel = require('../models/shoppingModel');
 const { validationResult, body } = require('express-validator');
 
 const shoppingController = {
-  // Obtener todas las compras
   getAllShopping: async (req, res) => {
     try {
       const shopping = await shoppingModel.getAllShopping();
@@ -12,7 +11,6 @@ const shoppingController = {
     }
   },
 
-  // Obtener una compra por ID
   getShoppingById: async (req, res) => {
     const id = req.params.id;
     try {
@@ -26,9 +24,7 @@ const shoppingController = {
     }
   },
 
-  // Crear una nueva compra
   createShopping: [
-    // Validación de datos
     body('user_id').isInt({ min: 1 }).withMessage('user_id debe ser un entero positivo'),
     body('package_id').isInt({ min: 1 }).withMessage('package_id debe ser un entero positivo'),
     body('purchase_date').isISO8601().withMessage('purchase_date debe ser una fecha ISO8601 válida'),
@@ -53,9 +49,7 @@ const shoppingController = {
     },
   ],
 
-  // Actualizar una compra por ID
   updateShopping: [
-        // Validación de datos
         body('user_id').optional().isInt({ min: 1 }).withMessage('user_id debe ser un entero positivo'),
         body('package_id').optional().isInt({ min: 1 }).withMessage('package_id debe ser un entero positivo'),
         body('purchase_date').optional().isISO8601().withMessage('purchase_date debe ser una fecha ISO8601 válida'),
@@ -83,7 +77,6 @@ const shoppingController = {
     },
   ],
 
-  // Eliminar una compra por ID
   deleteShopping: async (req, res) => {
     const id = req.params.id;
     try {

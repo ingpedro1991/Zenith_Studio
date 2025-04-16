@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const shoppingController = require('../controllers/shoppingController');
-const authMiddleware = require('../middleware/authMiddleware'); // Importa el middleware de autenticación
+const authMiddleware = require('../middleware/authMiddleware')
 
-// Rutas para shopping
-router.get('/', authMiddleware.verifyToken, shoppingController.getAllShopping); // Requiere autenticación
-router.get('/:id', authMiddleware.verifyToken, shoppingController.getShoppingById); // Requiere autenticación
-router.post('/', authMiddleware.verifyToken, shoppingController.createShopping); // Requiere autenticación
-router.put('/:id', authMiddleware.verifyToken, shoppingController.updateShopping); // Requiere autenticación
 
-//solo el admin
-router.delete('/:id', authMiddleware.verifyToken, authMiddleware.isAdmin, shoppingController.deleteShopping); // Requiere autenticación y ser administrador
+router.get('/', authMiddleware.verifyToken, shoppingController.getAllShopping);
+router.get('/:id', authMiddleware.verifyToken, shoppingController.getShoppingById);
+router.post('/', authMiddleware.verifyToken, shoppingController.createShopping);
+router.put('/:id', authMiddleware.verifyToken, shoppingController.updateShopping); 
+
+
+router.delete('/:id', authMiddleware.verifyToken, authMiddleware.isAdmin, shoppingController.deleteShopping);
 
 
 module.exports = router;

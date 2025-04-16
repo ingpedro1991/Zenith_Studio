@@ -1,13 +1,11 @@
 const db = require('../utils/db');
 
 const packageModel = {
-  // Obtener todos los packages
   getAllpackages: async () => {
     const sql = 'SELECT * FROM packages';
     return await db.query(sql);
   },
 
-  // Obtener un package por ID
   getpackageById: async (id) => {
     const sql = 'SELECT * FROM packages WHERE id = ?';
     const values = [id];
@@ -15,7 +13,6 @@ const packageModel = {
     return results[0];
   },
 
-  // Crear un nuevo package
   createpackage: async (packageData) => {
     const { name, number_class, price, duration_days, status } = packageData;
     const sql = `
@@ -27,7 +24,6 @@ const packageModel = {
     return result.insertId;
   },
 
-  // Actualizar un package por ID
   updatepackage: async (id, packageData) => {
     const { name, number_class, price, duration_days, status } = packageData;
     const sql = `
@@ -39,7 +35,6 @@ const packageModel = {
     await db.query(sql, values);
   },
 
-  // Eliminar un package por ID
   deletepackage: async (id) => {
     const sql = 'DELETE FROM packages WHERE id = ?';
     const values = [id];

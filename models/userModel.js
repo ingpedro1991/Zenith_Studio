@@ -1,26 +1,23 @@
 const db = require('../utils/db');
 const bcrypt = require('bcrypt');
 
-const saltRounds = 10; // Número de rondas de hashing
+const saltRounds = 10;
 
 const userModel = {
-  // Obtener todos los usuarios
   getAllUsers: async () => {
     const sql = 'SELECT id, username, email, photo, name, status, created_at, updated_at FROM users';
     return await db.query(sql);
   },
 
-  // Obtener un usuario por ID
   getUserById: async (id) => {
     const sql = 'SELECT id, username, email, photo, name, status, created_at, updated_at FROM users WHERE id = ?';
     const values = [id];
     const results = await db.query(sql, values);
-    return results[0]; // Devuelve el primer resultado o undefined
+    return results[0];
   },
 
-  // Obtener un usuario por username
   getUserByUsername: async (username) => {
-    const sql = 'SELECT * FROM users WHERE username = ?'; // Selecciona todos los campos
+    const sql = 'SELECT * FROM users WHERE username = ?';
     const values = [username];
     const results = await db.query(sql, values);
     return results[0];
@@ -36,10 +33,9 @@ const userModel = {
     `;
     const values = [username, email, photo, hashedPassword, name, status];
     const result = await db.query(sql, values);
-    return result.insertId; // Devuelve el ID del usuario insertado
+    return result.insertId;
   },
 
-  // Actualizar un usuario por ID
   updateUser: async (id, userData) => {
       const { username, email, photo, name, status } = userData;
       let sql = `
@@ -47,7 +43,6 @@ const userModel = {
       `;
       const values = [username, email, photo, name, status];
 
-      // Si se proporciona una nueva contraseña, la hasheamos y la incluimos en la actualización
       if (userData.password) {
           const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
           sql += `, password = ?`;
@@ -60,7 +55,6 @@ const userModel = {
       return await db.query(sql, values);
   },
 
-  // Eliminar un usuario por ID
   deleteUser: async (id) => {
     const sql = 'DELETE FROM users WHERE id = ?';
     const values = [id];

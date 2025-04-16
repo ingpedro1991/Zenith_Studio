@@ -1,13 +1,11 @@
 const db = require('../utils/db');
 
 const shoppingModel = {
-  // Obtener todas las compras
   getAllShopping: async () => {
     const sql = 'SELECT * FROM shopping';
     return await db.query(sql);
   },
 
-  // Obtener una compra por ID
   getShoppingById: async (id) => {
     const sql = 'SELECT * FROM shopping WHERE id = ?';
     const values = [id];
@@ -15,7 +13,6 @@ const shoppingModel = {
     return results[0];
   },
 
-  // Crear una nueva compra
   createShopping: async (shoppingData) => {
     const { user_id, package_id, purchase_date, expiration_date, payment_method, receipt } = shoppingData;
     const sql = `
@@ -27,7 +24,6 @@ const shoppingModel = {
     return result.insertId;
   },
 
-  // Actualizar una compra por ID
   updateShopping: async (id, shoppingData) => {
     const { user_id, package_id, purchase_date, expiration_date, payment_method, receipt } = shoppingData;
     const sql = `
@@ -39,7 +35,6 @@ const shoppingModel = {
     await db.query(sql, values);
   },
 
-  // Eliminar una compra por ID
   deleteShopping: async (id) => {
     const sql = 'DELETE FROM shopping WHERE id = ?';
     const values = [id];

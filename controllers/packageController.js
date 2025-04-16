@@ -1,8 +1,7 @@
 const packageModel = require('../models/packageModel');
-const { validationResult, body } = require('express-validator'); // Importa body desde express-validator
+const { validationResult, body } = require('express-validator');
 
 const packageController = {
-  // Obtener todos los packages
   getAllpackages: async (req, res) => {
     try {
       const packages = await packageModel.getAllpackages();
@@ -12,7 +11,6 @@ const packageController = {
     }
   },
 
-  // Obtener un package por ID
   getpackageById: async (req, res) => {
     const id = req.params.id;
     try {
@@ -26,9 +24,7 @@ const packageController = {
     }
   },
 
-  // Crear un nuevo package (solo admin)
   createpackage: [
-    // Middleware de validación
     body('name').notEmpty().withMessage('El nombre es requerido'),
     body('number_class').isInt({ min: 1 }).withMessage('El número de clases debe ser un entero mayor que 0'),
     body('price').isFloat({ min: 0 }).withMessage('El precio debe ser un número mayor o igual a 0'),
@@ -51,9 +47,7 @@ const packageController = {
     },
   ],
 
-  // Actualizar un package por ID (solo admin)
   updatepackage: [
-    // Middleware de validación
     body('name').notEmpty().withMessage('El nombre es requerido'),
     body('number_class').isInt({ min: 1 }).withMessage('El número de clases debe ser un entero mayor que 0'),
     body('price').isFloat({ min: 0 }).withMessage('El precio debe ser un número mayor o igual a 0'),
@@ -79,7 +73,6 @@ const packageController = {
     },
   ],
 
-  // Eliminar un package por ID (solo admin)
   deletepackage: async (req, res) => {
     const id = req.params.id;
     try {
